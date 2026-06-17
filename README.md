@@ -67,12 +67,37 @@ Ferramenta de empacotamento (build) do ecossistema Java.
 
 ### 1) Identificação do Requisito
 
-> *Colar aqui o texto do requisito escolhido pela dupla (copiado do [board do Miro da A1.07](https://miro.com/app/board/uXjVHNLB3x8=/?share_link_id=916723536145)).*
+RF11: O sistema deve alocar automaticamente uma aeronave a um portão compatível em menos de 2 segundos após a solicitação, considerando tamanho da aeronave, horários e capacidade de fluxo.
+
+RNF11: O algoritmo de alocação deve ter 99,5% de disponibilidade durante o horário de pico (6h–22h) e registrar toda mudança de alocação em log imutável para auditoria.
+
+Descrição completa: Para otimizar a operação aeroportuária e evitar gargalos, o PrettyFlights possui um módulo de alocação inteligente de portões (gates). O algoritmo distribui aeronaves nos portões disponíveis considerando três fatores principais: tamanho da aeronave (compatibilidade física), horário de pouso/decolagem (conflito de horários) e fluxo de passageiros (evitar superlotação em áreas de espera). Sempre que uma nova aeronave solicita alocação, o sistema deve calcular o portão mais adequado em tempo real, reservá-lo e notificar as equipes de solo e embarque.
 
 ### 2) Implementação do Requisito
 
-> *Apresentar as classes implementadas pela dupla (solução de design) para atender ao requisito alvo dos testes automatizados.*
+src/main/java/com/prettyflights/
+├── model/
+│   ├── enums/
+│   │   └── AircraftSize.java
+│   ├── Aircraft.java
+│   ├── Gate.java
+│   └── Flight.java
+├── service/
+│   ├── GateAllocationService.java
+│   └── GroundCrewService.java
+├── repository/
+│   ├── GateRepository.java
+│   └── AuditRepository.java
+└── controller/
+    └── GateController.java
+    
+<Classes Implementadas>
 
+1. AircraftSize (Enum)
+2. Aircraft.java
+3. Gate.java
+4. GateAllocationService.java
+   
 ### 3) Codificação dos Testes
 
 > *Popular a seguinte tabela com todos os casos de teste implementados (unitários e de integração):*
