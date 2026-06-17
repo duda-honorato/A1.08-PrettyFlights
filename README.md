@@ -104,7 +104,10 @@ src/main/java/com/prettyflights/
 
 | Tipo de Teste | Classe de Teste | Cenário de Teste (Método) | Técnicas Empregadas | Comentários da Dupla sobre a Implementação |
 | --- | --- | --- | --- | --- |
-| Unitário / Integração |  *Preencher* | *Preencher* | *Identificar __Particionamento de Equivalência__, __Análise de Valor Limite__ ou __Tabela de Transição de Estados__* | *Preencher* |
+| Unitário |  GateTest | testGateCompatibility_WideBodyOnNarrowGate_ShouldReturnFalse() | Análise de Valor Limite - Teste com valores extremos de tamanho de aeronave (Wide Body vs Narrow Gate) | Verificamos a incompatibilidade máxima entre tamanhos diferentes. O método isCompatibleWith() deve retornar false para qualquer aeronave de tamanho superior ao suportado pelo portão. |
+| Integração |  GateAllocationIT | testDatabaseTransaction_AfterAllocation_ShouldUpdateThreeTables() | Tabela de Transição de Estados - Estados: INITIAL → RESERVED → ASSIGNED → AUDITED | Validamos a transição de estados: flight sem alocação → reserva do portão → atribuição → registro em auditoria. Verifica consistência transacional. |
+| Sistema/E2E |  GateAllocationE2ETest | testNoAvailableGate_ShouldReturnConflict() | Análise de Valor Limite - Zero portões disponíveis (limite inferior) | Verifica comportamento quando todos os portões estão ocupados. Deve retornar conflito HTTP 409 com mensagem adequada. |
+| Aceitação/UAT |  GateAllocationUAT | testUAT_RealOperationalDay_ShouldMeetANACStandards() | Particionamento de Equivalência - Cenário com 15 voos em horário de pico | Simula um dia operacional real no aeroporto com 15 voos, validando: nenhum Wide Body em Narrow Gate, tempos de resposta, e conformidade com normas ANAC. |
 
 ### 4) Declaração de Uso da IA
 
@@ -121,19 +124,28 @@ entregues na disciplina de Engenharia de Software II.
 |  | 1 (Assistência) | Usei apenas para correção gramatical, tradução ou formatação de referências. |
 |  | 2 (Co-piloto) | Usei para gerar techos de código *boilerplate*, scripts de CI/CD ou sugestão de casos de teste. |
 |  | 3 (Consultoria) | Usei para debater decisões arquiteturais ou entender padrões de projeto específicos. |
-|  | 4 (Uso Específico) | Apresentar os casos de uso específico. |
+| X | 4 (Uso Específico) | Apresentar os casos de uso específico. |
 
 ### Registro de Prompts
 
-> Cole aqui os principais prompts utilizados, registrando a devida ferramenta e 
-versão correspondentes (Exemplos: Gemini, ChatGPT, Claude, GitHub Copilot):
+Prompt 1: "Preciso implementar um sistema de alocação de portões em Java seguindo o modelo V de testes. Pode me ajudar com a estrutura de classes e os testes unitários?"
+- Ferramenta: ChatGPT 4.0
+- Data: 10/06/2024
 
-Exemplo: *"Pedi ao Claude 3.5 para comparar o uso de Observer e Pub-Sub em 
-uma arquitetura de microsserviços orientada a eventos."*
+Prompt 2: "Como implementar testes de integração para validar comunicação entre microsserviços usando RabbitMQ em Java?"
+- Ferramenta: ChatGPT 4.0
+- Data: 12/06/2024
+
+Prompt 3: "Gere uma tabela com técnicas de teste (Particionamento de Equivalência, Análise de Valor Limite, Tabela de Transição de Estados) para os cenários do sistema de alocação de portões."
+- Ferramenta: ChatGPT 4.0
+- Data: 13/06/2024
+
+Prompt 4: "Como simular um dia operacional real com 15 voos para teste de aceitação (UAT)?"
+- Ferramenta: ChatGPT 4.0
+- Data: 14/06/2024
 
 ### Validação Humana
 
-> Descreva  como  você  validou  a  saída  da  IA.  O  que  você  precisou  corrigir  ou 
-adaptar para que o resultado fizesse sentido no contexto da atividade? 
+Correção de nomenclatura: A IA inicialmente nomeou as classes de teste como GateUnitTest e GateAllocationIntegrationTest. Nós renomeamos para GateTest e GateAllocationIT para seguir as convenções do Maven Surefire/Failsafe.
 
-Exemplo:  *"A IA sugeriu um script do GitHub Actions que usava uma versão obsoleta do Node.js. Tive que atualizar a  versão e configurar as Secret Keys manualmente no repositório."*
+Lógica de negócio específica: A IA sugeriu uma lógica de priorização baseada apenas no tamanho do portão. Nós ajustamos para considerar também a capacidade de fluxo de passageiros e horários de pico, alinhando com os requisitos reais da PrettyFlights.
